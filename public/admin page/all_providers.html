@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      var module = angular.module("myModule", []);
+      var controller = module.controller(
+        "myController",
+        function ($scope, $http) {
+          $scope.providerData = [];
+          $scope.FetchAll = function () {
+            let url = "/provided-data";
+            $http.get(url).then(success, error);
+            function success(response) {
+              $scope.providerData = response.data;
+            }
+            function error(response) {
+              alert(response.data);
+            }
+          };
+        }
+      );
+    </script>
+  </head>
+  <body ng-app="myModule" ng-controller="myController" ng-init="FetchAll();">
+    <center>
+      <!-- <table border="1" rules="all">
+            <tr>
+                <td>S. No.</td>
+                <td>Email</td>
+                <td>Name</td>
+                <td>Gender</td>
+                <td>Contact</td>
+                <td>Category</td>
+                <td>Firm</td>
+                <td>Website</td>
+                <td>Location</td>
+                <td>Since</td>
+                <td>Proof pic</td>
+                <td>Other info</td>
+            </tr>
+            <tr ng-repeat="obj in providerData">
+                <td>{{$index+1}}</td>
+                <td>{{obj.emailid}}</td>
+                <td>{{obj.name}}</td>
+                <td>{{obj.gender}}</td>
+                <td>{{obj.contact}}</td>
+                <td>{{obj.category}}</td>
+                <td>{{obj.firm}}</td>
+                <td>{{obj.website}}</td>
+                <td>{{obj.location}}</td>
+                <td>{{obj.since}}</td>
+                <td>{{obj.proofpic}}</td>
+                <td>{{obj.otherinfo}}</td>
+            </tr>
+        </table> -->
+      <div class="container">
+        <div class="row">
+          <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" ng-repeat="obj in providerData">
+              <div class="card h-100">
+                <img
+                  src="../uploads/{{obj.proofpic}}"
+                  class="card-img-top"
+                  width="100px"
+                  height="100px"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">NAME : {{obj.name}}</h5>
+                  <p class="card-text">EMAILID : {{obj.emailid}}</p>
+                  <p class="card-text">GENDER : {{obj.gender}}</p>
+                  <p class="card-text">CONTACT : {{obj.contact}}</p>
+                  <p class="card-text">CATEGORY : {{obj.category}}</p>
+                  <p class="card-text">FIRM : {{obj.firm}}</p>
+                  <p class="card-text">WEBSITE : {{obj.website}}</p>
+                  <p class="card-text">LOCATION : {{obj.location}}</p>
+                  <p class="card-text">SINCE : {{obj.since}}</p>
+                  <p class="card-text">OTHER INFO : {{obj.otherinfo}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </center>
+  </body>
+</html>

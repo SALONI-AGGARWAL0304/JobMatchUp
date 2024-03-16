@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Page</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      function doShowPrev(refFile, refImg) {
+        const [file] = refFile.files;
+        if (file) {
+          refImg.src = URL.createObjectURL(file);
+        }
+      }
+    </script>
+    <script>
+      $(document).ready(function()
+      {
+        let user = localStorage.getItem("user");
+        $("#emails").val(user);
+        $("#btnSearchs").click(function()
+        {
+          const servicemail = $("#emails").val();
+          let service_obj={
+            url:"/fetch-one" ,
+            type:"post",
+            data: {
+              servicemail:servicemail,
+            }
+          }
+          $.ajax(service_obj).done(function(result){
+            alert(JSON.stringify(result));
+            $("#inputname").val(result[0].name);
+            $("#inputnum").val(result[0].contact);
+            $("#gender").val(result[0].gender);
+            $("#taskcategory").val(result[0].category);
+            $("#firm").val(result[0].firm);
+            $("#website").val(result[0].website);
+            $("#address").val(result[0].location);
+            $("#tasksince").val(result[0].since);
+            $("#previouswork").val(result[0].otherinfo);
+            $("#prev").prop("src", "uploads/" + result[0].proofpic);
+          }).fail(function(err)
+          {
+            alert(err);
+          });
+        })
+        $("#btncreate").click(function()
+        {
+          const mail = $("#emails").val();
+          const name = $("#inputname").val();
+          const gender = $("#gender").val();
+          const category = $("#taskcategory").val();
+          const firm = $("#firm").val();
+          const website = $("#wesite").val();
+          const address = $("#address").val();
+          const exp = $("#tasksince").val();
+          const prev = $("#previouswork").val();
+          const check = $("#flexCheckIndeterminate").val();
+          if(mail=="" || name=="" || gender=="" || category=="" || firm=="" ||website==""
+          || address=="" || exp=="" || prev=="" || check=="")
+          {
+            alert("fill all values first");
+          }
+        })
+      })
+    </script>
+  </head>
+  <body>
+    <div
+      class="row justify-content-center align-items-center"
+      style="height: 100vh"
+    >
+      <div class="col-md-9">
+        <h5 class="text-center mb-4">Register HERE</h5>
+
+        <div class="card">
+          <div class="card-body">
+            <form
+              action="/service_form-register"
+              class="row g-3"
+              method="post"
+              enctype="multipart/form-data"
+            >
+              <center></center>
+              <div class="col-md-9">
+                <label for="emails" class="form-label">Email</label>
+                <input readonly
+                  type="text"
+                  class="form-control"
+                  id="emails"
+                  name="emails"
+                />
+              </div>
+
+              <div class="col-md-3">
+                <br />
+                <button type="button" class="btn btn-danger" id="btnSearchs">
+                  Search
+                </button>
+              </div>
+              <div class="col-md-6">
+                <label for="inputname" class="form-label">Name</label>
+
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputname"
+                  name="Inputname"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="inputnum" class="form-label">Contact Number</label>
+
+                <input
+                  type="number"
+                  class="form-control"
+                  id="inputnum"
+                  name="Inputnum"
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="gender" class="form-label">Gender</label>
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  id="gender"
+                  name="gender"
+                >
+                  <option value="select">Select</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="taskcategory" class="form-label">Category</label>
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  id="taskcategory"
+                  name="taskcategory"
+                >
+                  <option value="select">Select</option>
+                  <option value="plumber">Plumber</option>
+                  <option value="carpenter">Carpenter</option>
+                  <option value="Electricity">Electrician</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="firm" class="form-label">Firm(if any)</label>
+                <input type="text" class="form-control" id="firm" name="firm" />
+              </div>
+              <div class="col-md-6">
+                <label for="wesite" class="form-label">Website(if any)</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="website"
+                  name="website"
+                />
+              </div>
+              <div class="col-md-12">
+                <label for="address" class="form-label"
+                  >Location/Firm Address</label
+                >
+                <textarea
+                  id="address"
+                  name="address"
+                  class="form-control"
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="tasksince" class="form-label">Expierence </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="tasksince"
+                  name="tasksince"
+                />
+              </div>
+              <div class="col-md-12">
+                <label for="idupload" class="form-label">Id proof</label>
+                <input
+                  type="file"
+                  name="serviceid"
+                  id="idupload"
+                  class="form-label"
+                  onchange="doShowPrev(this, prev);"
+                />
+                <img src="" alt="" id="prev" height="100" width="100" />
+              </div>
+              <div class="col-md-12">
+                <label for="previouswork" class="form-label"
+                  >Previous Works</label
+                >
+                <textarea
+                  id="previouswork"
+                  name="previouswork"
+                  class="form-control"
+                ></textarea>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckIndeterminate"
+                  />
+                  <label class="form-check-label" for="flexCheckIndeterminate">
+                    Terms and Conditions
+                  </label>
+                </div>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-danger" id="btncreate">
+                  Create profile
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-danger"
+                  id="btnupdate"
+                  formaction="/update"
+                >
+                  Modify
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

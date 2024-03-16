@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(document).ready(function()
+      {
+          let user=localStorage.getItem("user");
+          $("#active").html(user);
+          $("#settingsmail").val(user);
+          $("#mailpost").val(user);
+          //alert(user);
+        $("#btnLogout").click(function(){
+          localStorage.removeItem("user");
+          location.href="../index.html";
+        })
+
+//----------------------------------------------------------
+
+        $("#postjob_btn").click(function()
+        {
+          const postmail= $("#mailpost").val();
+          const postwork= $("#taskpost").val();
+          const postaddress=$("#taskadd").val();
+          const postcity= $("#taskcity").val();
+          const postupto = $("#taskdate").val();
+          const postdone = $("#taskwork").val();
+          if (!postmail || !postwork || !postaddress || !postcity || !postupto || !postdone) {
+    alert("Fill all fields first");
+  }
+          else
+          {let post_obj={
+            url: "/postjobs",
+            type :"post",
+            data : {
+              postmail : postmail,
+              postwork:postwork,
+              postaddress : postaddress,
+              postcity:postcity,
+              postupto : postupto,
+              postdone:postdone,
+            }
+          };
+          $.ajax(post_obj).done(
+            function( resp)
+            {
+              alert(resp);
+            }
+          ).fail(function(err)
+          {
+            alert(err);
+          });}
+        })
+        $("#homeradio").click(function()
+        {
+          let home_obj={
+            url:"/fetch-address",
+            type:"post",
+            data : {
+              radiomail : $("#mailpost").val(),
+            }
+          }
+          // alert($("#mailpost").val());
+          $.ajax(home_obj).done(function(resp){
+            // alert(JSON.stringify(resp));
+            $("#taskadd").val(resp[0].address);
+            $("#taskcity").val(resp[0].city);
+          }).fail(function(err)
+          {
+            alert(err);
+          })
+        })
+        $("#otherradio").click(function()
+        {
+          $("#taskadd").val("");
+            $("#taskcity").val("");
+        })
+        $("#change_pass_btn").click(function()
+        {
+          let change_obj={
+            url:"/settings_customer",
+            type:"post",
+            data : {
+              changemail :$("#settingsmail").val(),
+              changeoldpass:$("#settigsoldpassword").val(),
+              changenewpass:$("#settigsnewpassword").val(),
+            }
+          }
+          $.ajax(change_obj).done(function(resp)
+          {
+            alert(resp);
+          }).fail(function(err)
+          {
+            alert(err);
+          })
+        })
+        
+      })
+    </script>
+  </head>
+  <body>
+    <center>
+      <p>
+       <b> Welcome : <span id="active"></span></b>
+      </p>
+      <h4>Customer Service Dashboard</h4>
+    </center>
+    <div class="container mt-3">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+          <div class="card h-100">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body text-center">
+              <h5 class="card-title">Profile</h5>
+              <a href="customer_profile.html" class="btn btn-primary">Go</a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body text-center">
+              <h5 class="card-title">Post Jobs</h5>
+              <!-- <a href="" class="btn btn-primary">Go</a> -->
+              <button
+              class="btn btn-outline-primary me-2"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#modalPostRequirement"
+            >
+              GO
+            </button>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body text-center">
+              <h5 class="card-title">Jobs Manager</h5>
+              <a href="customer_job_manager.html" class="btn btn-primary">Go</a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body text-center">
+              <h5 class="card-title">Search service Providers</h5>
+              <a href="customer_search.html" class="btn btn-primary">Go</a>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body text-center">
+              <h5 class="card-title">Settings</h5>
+              <!-- <a href="" class="btn btn-primary">Go</a> -->
+              <button
+              class="btn btn-outline-primary me-2"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#modalseettings"
+            >
+              GO
+            </button>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body text-center">
+              <h5 class="card-title">Alvidaaaa</h5>
+              <!-- <a href="" class="btn btn-primary">Go</a> -->
+              <button
+              class="btn btn-outline-primary me-2"
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#modalseettings" id="btnLogout"
+            >
+              Logout
+            </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- modal of post requirement page  -->
+   <div
+    class="modal fade"
+    id="modalPostRequirement"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-success">
+          <h1 class="modal-title fs-5 text-white" id="exampleModalLabel ">
+            Post task/Requirement
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form method="post">
+            <div class="mb-3">
+              <label for="mailpost" class="form-label"
+                >Email address </label
+              >
+              <input readonly
+                type="email"
+                class="form-control"
+                id="mailpost"
+                aria-describedby="emailHelp"
+                name="txtEmail"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="taskpost" class="form-label"
+                >Task Category / Type of Work </label
+              >
+              <select name="txttype" id="taskpost" class="form-control">
+                <option value="select">Select</option>
+              <option value="plumber">Plumber</option>
+              <option value="carpenter">Carpenter</option>
+              <option value="Electricity">Electrician</option>
+            </select>
+            </div>
+            <div class="mb-3">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="postradio" id="homeradio" value="home">
+                <label class="form-check-label" for="homeradio">Home</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="postradio" id="otherradio" value="other">
+                <label class="form-check-label" for="otherradio">Other</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="taskadd" class="form-label"
+                >Address </label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="taskadd"
+                name ="txtAdd"
+              />
+            </div>
+              <div class="mb-3">
+                <label for="taskcity" class="form-label"
+                  >City </label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="taskcity"
+                  name ="txtcity"
+                />
+              </div>
+                <div class="mb-3">
+                  <label for="taskdate" class="form-label"
+                    >Up to </label
+                  >
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="taskdate"
+                    name ="txtdate"
+                  />
+                </div>
+                  <div class="mb-3">
+                    <label for="taskwork" class="form-label"
+                      >Task / Work to be done</label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="taskwork"
+                      name ="txtwork"
+                    ></textarea>
+                  </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-outline-success" value="Post Jobs" id="postjob_btn">
+            </input>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- modal of setting page  -->
+  <div
+  class="modal fade"
+  id="modalseettings"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success">
+        <h1 class="modal-title fs-5 text-white" id="exampleModalLabel ">
+          SETTINGS
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          <div class="mb-3">
+            <label for="settingsmail" class="form-label">Email address </label
+            >
+            <input readonly
+              type="email"
+              class="form-control"
+              id="settingsmail"
+              aria-describedby="emailHelp"
+              name="txtEmailsettings"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="settigsoldpassword" class="form-label"
+              >Old Password </label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="settigsoldpassword"
+              name ="txtPassOld"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="settigsnewpassword" class="form-label"
+              >New Password </label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="settigsnewpassword"
+              name ="txtPassNew"
+            />
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-outline-success" value="UPDATE" id="change_pass_btn">
+          </input>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+  crossorigin="anonymous"
+></script>
+  </body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        var module = angular.module("myModule", []);
+        var controller = module.controller(
+            "myController",
+            function ($scope, $http) {
+                $scope.selCity;
+                $scope.selCategory;
+                $scope.doFetchDistinctLoc = function () {
+                    let url = "/angular-fetch-distinct-loc";
+                    $http.get(url).then(success, errors);
+                    function success(response) {
+                        // alert(response.data);
+                        $scope.jsonCityAry = response.data;
+                        alert(jsonCityAry);
+                    }
+                    function errors(response) {
+                        alert(response.data);
+                    }
+                };
+                $scope.doFetchDistinctCategpry = function () {
+                    let url = "/angular-fetch-distinct-category";
+                    $http.get(url).then(success, errors);
+                    function success(response) {
+                        $scope.jsonCategoryAry = response.data;
+                    }
+                    function errors(response) {
+                        alert(response.data);
+                    }
+                };
+
+                $scope.doShowSelCity = function () {
+                    let url = "/fetch-one-record?city=" + $scope.selCity.location + "&job=" + $scope.selCategory.category;
+                    $http.get(url).then(success, errors);
+                    function success(response) {
+                        $scope.jsonRecordsAry = response.data;
+                    }
+                    function errors(response) {
+                        alert(response.data);
+                    }
+                };
+
+                $scope.doShowDetails=function(index)
+                {
+                    $scope.selObj=$scope.jsonRecordsAry[index];
+                }
+            }
+        );
+    </script>
+</head>
+<body
+    ng-app="myModule"
+    ng-controller="myController"
+    ng-init="doFetchDistinctLoc(); doFetchDistinctCategpry();"
+>
+
+<div class="container">
+  <nav class="navbar">
+    <div class="container-fluid">
+      <form
+        class="d-flex justify-content-end align-items-center"
+        role="search"
+      >
+        <label for="searchcity" class="form-label me-2">City</label>
+        <select
+        id="searchcity"
+        class="form-control me-2"
+        ng-options="obj.location  for obj in jsonCityAry"
+        ng-model="selCity"
+        >
+        <!-- ng-change="doShowSelCity();" -->
+          <option value="">Select</option>
+        </select>
+        <label for="searchitem" class="form-label me-2"
+          >Task Category</label
+        >
+        <select
+          id="searchitem"
+          class="form-control me-2"
+          ng-options="obj.category  for obj in jsonCategoryAry"
+                ng-model="selCategory"
+        >
+          <option value="">Select</option>
+        </select>
+       <button value="search" ng-click="doShowSelCity();">Search </button>
+      </form>
+    </div>
+  </nav>
+</div>
+
+
+<div class="col-md-12">
+    <center>
+        <h2>
+            All Records
+        </h2>
+    </center>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3" ng-repeat="obj in jsonRecordsAry">
+            <div class="card" >
+                <img src="../uploads/{{obj.proofpic}}" class="card-img-top" alt="..." height="150">
+                <div class="card-body">
+                    <h5 class="card-title">{{obj.emailid}}</h5>
+                    <p class="card-text">
+                        <p>
+                            Name: {{obj.name}}
+                        </p>
+                        <p>
+                            Gender: {{obj.gender}}
+                        </p>
+                    </p>
+                    <a href="#" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#detailsModal"  ng-click="doShowDetails($index);">Show Full Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details MODAL -->
+
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <p>
+                    contact= {{selObj.pwd}}
+                </p>
+                <p>
+                    Firm= {{selObj.firm}}
+                </p>
+                <p>
+                    Website= {{selObj.Website}}
+                </p>
+                <p>
+                    Since = {{selObj.since}}
+                </p>
+                <p>
+                    OtherInfo ={{selObj.otherInfo}}
+                </p>
+                <p>
+                    Pic Name= {{selObj.proofpic}}
+                </p>
+                <p>
+                    <img src="uploads/{{selObj.proofpic}}" width="100" height="100" alt="">
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
