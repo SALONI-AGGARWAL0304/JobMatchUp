@@ -415,13 +415,18 @@ app.post("/update", function (req, resp) {
     }
   );
 });
-app.post("/fetch-one", function (req, resp) {
+app.post("/fetch-ones", function (req, resp) {
   mysql.query(
     "select * from providers where emailid=?",
     [req.body.servicemail],
     function (err, resultJsonAry) {
-      // console.log(req.body);
-      resp.send(resultJsonAry);
+      if(err==null)
+     { console.log(req.body);
+      resp.send(resultJsonAry);}
+      else
+      {
+        console.log(err.message);
+      }
     }
   );
 });

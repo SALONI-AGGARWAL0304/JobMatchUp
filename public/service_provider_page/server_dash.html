@@ -39,8 +39,8 @@
     $("#change_pass_btn").click(function(event) {
         
         let email = $("#settingsmail").val();
-        let oldpass = $("#settigsoldpassword").val(); // Corrected selector
-        let newpass = $("#settigsnewpassword").val(); // Corrected selector
+        let oldpass = $("#settigsoldpassword").val(); 
+        let newpass = $("#settigsnewpassword").val(); 
         let change_obj = {
             url: "/setting-service",
             type : "post",
