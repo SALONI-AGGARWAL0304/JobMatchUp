@@ -23,11 +23,17 @@ app.get("/", function (req, resp) {
   resp.sendFile(path);
 });
 const configobj = {
-  host: "127.0.0.1",
-  user: "root",
-  password: "Saloni##2004",
-  database: "project",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database:  process.env.DB_DBNAME,
 };
+// const configobj = {
+//   host: "127.0.0.1",
+//   user: "root",
+//   password: "Saloni##2004",
+//   database: "project",
+// };
 const mysql = mysql2.createConnection(configobj);
 mysql.connect(function (err) {
   if (err == null) {
