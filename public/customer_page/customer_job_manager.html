@@ -17,13 +17,16 @@
       crossorigin="anonymous"
     ></script>
     <script>
+      var usersMail = localStorage.getItem("user");
+    </script>
+    <script>
       var module = angular.module("myModule", []);
       var controller = module.controller(
         "myController",
         function ($scope, $http) {
           $scope.customertask = [];
           $scope.fetchall = function () {
-            let url = "/customer-task";
+            let url = "/customer-task?mailID="+usersMail;
             $http.get(url).then(success, errors);
             function success(response) {
               $scope.customertask = response.data;
