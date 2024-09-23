@@ -2,15 +2,9 @@ const express = require("express");
 const app = express();
 const mysql2 = require("mysql2");
 const fileuploader = require("express-fileupload");
-const nodemailer = require("nodemailer");
+
 const { stat } = require("fs");
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "saloni3aggarwal123@gmail.com", // Replace with your Gmail email
-    pass: "renb zadv puoq xgcz", // Replace with your Gmail password
-  },
-});
+
 app.use(express.static("public"));
 app.use(fileuploader());
 app.use(express.urlencoded({ extended: true }));
@@ -54,21 +48,6 @@ app.get("/signup-collector", function (req, resp) {
     function (err) {
       if (err == null) {
         resp.send("Sign Up successfully");
-        const mailOptions = {
-          from: "saloniaggarwalofficial339@gmail.com", // Replace with your Gmail email
-          to: email,
-          subject: "Signup Confirmation",
-          text: "Thank you for signing up!",
-        };
-
-        transporter.sendMail(mailOptions, function (error, info) {
-          if (error) {
-            console.error(error);
-            return resp.status(500).send("Error sending confirmation email");
-          } else {
-            console.log(info.response);
-          }
-        });
       } else {
         console.error(err);
         resp.status(500).send(err.message);

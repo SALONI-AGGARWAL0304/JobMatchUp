@@ -19,8 +19,8 @@
     <script>
       var module = angular.module("myModule", []);
       module.controller("myController", function ($scope, $http) {
-        $scope.usersignupobj = [];
-        $scope.selectedUser = {};
+        $scope.usersignupobj = []; //array
+        $scope.selectedUser = {}; //object 
         $scope.fetchAll = function () {
           let url = "/fetch_users_signup";
           $http.get(url).then(success, error);
